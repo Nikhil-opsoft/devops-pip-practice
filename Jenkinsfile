@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: 'app/target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'app/target/*.war', fingerprint: true
             }
         }
     }
