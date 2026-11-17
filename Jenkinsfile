@@ -14,6 +14,10 @@ pipeline {
         githubPush()
     }
 
+    environment {
+        MAVEN_OPTS = '-Xmx384m'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -40,6 +44,22 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube analysis') {
+            steps {
+                dir('app') {
+                    withSonarQubeEnv('sonarqube') {
+                        sh 'mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=day5-app -Dsonar.projectName=day5-app'
+                    }
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         stage('Archive') {
             steps {
                 archiveArtifacts artifacts: 'app/target/*.jar', fingerprint: true
@@ -48,7 +68,7 @@ pipeline {
     }
 
     post {
-        success { echo 'Pipeline passed: artifact archived' }
+        success { echo 'Pipeline passed: quality gate OK, artifact archived' }
         failure { echo 'Pipeline failed: check the red stage above' }
     }
 }
