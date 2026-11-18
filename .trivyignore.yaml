@@ -1,0 +1,10 @@
+vulnerabilities:
+  - id: CVE-2026-97054
+    paths:
+      - "usr/bin/pebble"
+    statement: "Not applicable. Go stdlib inside Ubuntu's pebble service manager; the app runs java only and never starts pebble. Remove when base image ships Go >= 1.26.11. Triaged by Nikhil 2026-11-18."
+    expired_at: 2026-12-18
+misconfigurations:
+  - id: DS-0026
+    statement: "Accepted. App is a short-lived CLI with no endpoint to probe, so HEALTHCHECK adds nothing. Revisit if it becomes a service. Triaged by Nikhil 2026-11-18."
+    expired_at: 2026-12-18
