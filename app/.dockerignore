@@ -1,0 +1,4 @@
+target/
+*.orig
+*.good
+.env
