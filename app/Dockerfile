@@ -14,5 +14,6 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 RUN useradd --system --uid 10001 --no-create-home appuser
 COPY --from=build /src/target/day5-app-1.0-SNAPSHOT.jar app.jar
+EXPOSE 8080
 USER appuser
 ENTRYPOINT ["java", "-cp", "/app/app.jar", "com.opsoft.pip.App"]
